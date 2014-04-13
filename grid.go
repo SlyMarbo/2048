@@ -31,7 +31,9 @@ func NewGame(size int) *Game {
 	for i := range game.Grid {
 		game.Grid[i] = make([]*Tile, size)
 	}
-	game.Setup()
+	for i := 0; i < StartingTiles; i++ {
+		game.AddRandomTile()
+	}
 	return game
 }
 
@@ -41,9 +43,8 @@ func (g *Game) AddRandomTile() {
 		return
 	}
 
-	var num Number // == 2
-	prob := rand.Intn(100) + 1
-	if prob > 90 {
+	var num Number           // == 2
+	if rand.Intn(100) < 10 { // 10% chance
 		num++ // == 4
 	}
 
@@ -60,14 +61,6 @@ func (g *Game) AvailableCells() []Index {
 		}
 	}
 	return out
-}
-
-func (g *Game) CellsAvailable() bool {
-	return len(g.AvailableCells()) > 0
-}
-
-func (g *Game) IndexLegal(i Index) bool {
-	return i.X < g.Size && i.X >= 0 && i.Y < g.Size && i.Y >= 0
 }
 
 func (g *Game) String() string {
@@ -102,12 +95,6 @@ func (g *Game) RandomAvailableCell() *Index {
 	}
 	choice := available[rand.Intn(len(available))]
 	return &choice
-}
-
-func (g *Game) Setup() {
-	for i := 0; i < StartingTiles; i++ {
-		g.AddRandomTile()
-	}
 }
 
 func (g *Game) Wait() {

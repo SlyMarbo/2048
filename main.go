@@ -13,7 +13,6 @@ var shouldReset = false
 func main() {
 	var size = flag.Int("size", 4, "Width/height of the grid.")
 	var goal = flag.Int("goal", 2048, "Target score.")
-
 	flag.Parse()
 
 	if *size < 2 {
@@ -66,34 +65,24 @@ func doKeypress(key int) {
 
 	// Try the move.
 	if game.Play(dir) {
-		// Move was successful.
-		update()
+		update() // Move was successful.
 	}
 }
 
 func update() {
 	if shouldReset {
-		handle(reset())
+		_, err := term.Write([]byte{'\r'})
+		handle(err)
+		term.ClearLine()
+		for i := 0; i < game.Size*2+1; i++ {
+			_, err = term.Write([]byte{keyEscape, '[', 'A'})
+			handle(err)
+			term.ClearLine()
+		}
 	}
 	term.Println("Score:", game.Score)
 	term.Print(game)
 	shouldReset = true
-}
-
-func reset() error {
-	_, err := term.Write([]byte{'\r'})
-	if err != nil {
-		return err
-	}
-	term.ClearLine()
-	for i := 0; i < game.Size*2+1; i++ {
-		_, err := term.Write([]byte{keyEscape, '[', 'A'})
-		if err != nil {
-			return err
-		}
-		term.ClearLine()
-	}
-	return nil
 }
 
 func complain(msg string) {
