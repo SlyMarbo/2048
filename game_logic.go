@@ -25,22 +25,30 @@ func (g *Game) Play(d Direction) bool {
 	case Left:
 		if !g.Try(Right) && !g.Try(Up) && !g.Try(Down) {
 			g.Lost = true
-			g.Finished.Done()
+			if g.Finished != nil {
+				g.Finished.Done()
+			}
 		}
 	case Right:
 		if !g.Try(Left) && !g.Try(Up) && !g.Try(Down) {
 			g.Lost = true
-			g.Finished.Done()
+			if g.Finished != nil {
+				g.Finished.Done()
+			}
 		}
 	case Up:
 		if !g.Try(Left) && !g.Try(Right) && !g.Try(Down) {
 			g.Lost = true
-			g.Finished.Done()
+			if g.Finished != nil {
+				g.Finished.Done()
+			}
 		}
 	case Down:
 		if !g.Try(Left) && !g.Try(Right) && !g.Try(Up) {
 			g.Lost = true
-			g.Finished.Done()
+			if g.Finished != nil {
+				g.Finished.Done()
+			}
 		}
 	default:
 		panic("Unknown direction")
@@ -125,7 +133,9 @@ func (g *Game) Move(d Direction) bool {
 					}
 					if nextTile.Number == goal {
 						g.Won = true
-						g.Finished.Done()
+						if g.Finished != nil {
+							g.Finished.Done()
+						}
 					}
 					g.Score += tile.Number.Int()
 					tile = nil

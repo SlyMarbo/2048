@@ -42,7 +42,7 @@ func main() {
 		game.Finished.Done()
 	}()
 
-	game.Finished.Wait()
+	game.Wait()
 
 	if game.Won {
 		term.Println("\nCongratulations!")
@@ -96,6 +96,11 @@ func reset() error {
 		term.ClearLine()
 	}
 	return nil
+}
+
+func complain(msg string) {
+	fmt.Fprintln(os.Stderr, msg)
+	os.Exit(1)
 }
 
 func handle(err error) {

@@ -21,7 +21,7 @@ type Game struct {
 	Won      bool
 	Lost     bool
 	Score    int
-	Finished sync.WaitGroup
+	Finished *sync.WaitGroup
 }
 
 func NewGame(size int) *Game {
@@ -32,7 +32,6 @@ func NewGame(size int) *Game {
 		game.Grid[i] = make([]*Tile, size)
 	}
 	game.Setup()
-	game.Finished.Add(1)
 	return game
 }
 
@@ -109,4 +108,10 @@ func (g *Game) Setup() {
 	for i := 0; i < StartingTiles; i++ {
 		g.AddRandomTile()
 	}
+}
+
+func (g *Game) Wait() {
+	g.Finished = new(sync.WaitGroup)
+	g.Finished.Add(1)
+	g.Finished.Wait()
 }
