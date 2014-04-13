@@ -1,25 +1,38 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"os"
 )
-
-const esc = 27
-
-var size = 4
 
 var term *Terminal
 var game *Game
 var shouldReset = false
 
 func main() {
+	var size = flag.Int("size", 4, "Width/height of the grid.")
+	var goal = flag.Int("goal", 2048, "Target score.")
+
+	flag.Parse()
+
+	if *size < 2 {
+		fmt.Fprintln(os.Stderr, "Error: size must be at least 2.")
+		os.Exit(1)
+	}
+	if *goal < 4 {
+		fmt.Fprintln(os.Stderr, "Error: goal must be at least 4.")
+		os.Exit(1)
+	}
+	SetGoal(*goal)
+
 	var err error
 	term, err = NewTerminal(os.Stdin, os.Stdout, "")
 	handle(err)
 	defer term.Reset()
-	term.Println("Controls: wasd or arrow keys.")
+	term.Println("Controls: wasd or arrow keys to play, enter to exit.")
 
-	game = NewGame(size)
+	game = NewGame(*size)
 	update()
 
 	term.KeyCallback = doKeypress
@@ -75,8 +88,8 @@ func reset() error {
 		return err
 	}
 	term.ClearLine()
-	for i := 0; i < size*2+1; i++ {
-		_, err := term.Write([]byte{esc, '[', 'A'})
+	for i := 0; i < game.Size*2+1; i++ {
+		_, err := term.Write([]byte{keyEscape, '[', 'A'})
 		if err != nil {
 			return err
 		}
