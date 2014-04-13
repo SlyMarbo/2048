@@ -17,12 +17,10 @@ func main() {
 	flag.Parse()
 
 	if *size < 2 {
-		fmt.Fprintln(os.Stderr, "Error: size must be at least 2.")
-		os.Exit(1)
+		complain("Error: size must be at least 2.")
 	}
 	if *goal < 4 {
-		fmt.Fprintln(os.Stderr, "Error: goal must be at least 4.")
-		os.Exit(1)
+		complain("Error: goal must be at least 4.")
 	}
 	SetGoal(*goal)
 
