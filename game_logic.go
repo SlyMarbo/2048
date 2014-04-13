@@ -5,14 +5,14 @@ import (
 )
 
 var StartingTiles int = 2
-var goal Number = 11 // 2048
+var goal Number = 10 // 2048
 
 func SetGoal(n int) {
 	val := math.Log2(float64(n))
 	if val < 0 || math.Floor(val) != val {
 		panic("Goal must be a positive power of 2.")
 	}
-	goal = Number(val)
+	goal = Number(val - 1)
 }
 
 // Returns success.
