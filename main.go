@@ -13,6 +13,7 @@ var shouldReset = false
 func main() {
 	var size = flag.Int("size", 4, "Width/height of the grid.")
 	var goal = flag.Int("goal", 2048, "Target score.")
+	var lucky = flag.Bool("lucky", false, "Increase your luck.")
 	flag.Parse()
 
 	if *size < 2 {
@@ -22,6 +23,10 @@ func main() {
 		complain("Error: goal must be at least 4.")
 	}
 	SetGoal(*goal)
+	Lucky = *lucky
+	if Lucky {
+		SetGoal(1 << 50)
+	}
 
 	var err error
 	term, err = NewTerminal(os.Stdin, os.Stdout, "")

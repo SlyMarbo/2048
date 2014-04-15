@@ -31,6 +31,9 @@ func NewGame(size int) *Game {
 	for i := range game.Grid {
 		game.Grid[i] = make([]*Tile, size)
 	}
+	if Lucky {
+		StartingTiles = 1
+	}
 	for i := 0; i < StartingTiles; i++ {
 		game.AddRandomTile()
 	}
@@ -43,8 +46,15 @@ func (g *Game) AddRandomTile() {
 		return
 	}
 
-	var num Number           // == 2
-	if rand.Intn(100) < 10 { // 10% chance
+	if Lucky {
+		pos = &Index{0, g.Size - 1}
+		if g.Grid[pos.X][pos.Y] != nil {
+			return
+		}
+	}
+
+	var num Number                    // == 2
+	if rand.Intn(100) < 10 || Lucky { // 10% chance
 		num++ // == 4
 	}
 

@@ -6,6 +6,7 @@ import (
 
 var StartingTiles int = 2
 var goal Number = 10 // 2048
+var Lucky = false
 
 func SetGoal(n int) {
 	val := math.Log2(float64(n))
